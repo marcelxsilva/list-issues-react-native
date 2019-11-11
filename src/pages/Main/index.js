@@ -12,7 +12,7 @@ import {
   ProfileButton,
   ProfileButtonText,
 } from './styles';
-import { Keyboard } from 'react-native';
+import { Keyboard, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '../../services/api';
 
@@ -20,11 +20,12 @@ export default class Main extends Component {
   state = {
     newUser: '',
     users: [],
+    loading: false,
 
   }
   handleSubmit = async () => {
     const { newUser, users } = this.state;
-
+    this.setState({ loading: true })
     const response = await api.get(`/users/${newUser}`);
 
     const data = {
@@ -33,11 +34,11 @@ export default class Main extends Component {
       bio: response.data.bio,
       avatar: response.data.avatar_url,
     }
-    this.setState({ users: [...users, data], newUser: '' });
+    this.setState({ users: [...users, data], newUser: '', loading: false });
     Keyboard.dismiss();
   }
   render() {
-    const { users, newUser } = this.state;
+    const { users, newUser, loading } = this.state;
     return (
       <Container>
         <Form>
@@ -50,12 +51,17 @@ export default class Main extends Component {
             returnKeyType='send'
             onSubmitEditing={this.handleSubmit}
           />
-          <SubmitButton onPress={this.handleSubmit}>
-            <Icon
-              name='add'
-              size={20}
-              color='#fff'
-            />
+          <SubmitButton loading={loading} onPress={this.handleSubmit}>
+            {
+              loading ?
+                <ActivityIndicator color='#fff' /> :
+                <Icon
+                  name='add'
+                  size={20}
+                  color='#fff'
+                />
+            }
+
           </SubmitButton >
         </Form>
 
