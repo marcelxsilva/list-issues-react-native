@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Form, Input, SubmitButton } from './styles';
+import { Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '../../services/api';
 
@@ -21,6 +22,7 @@ export default class Main extends Component {
       avatar: response.data.avatar_url,
     }
     this.setState({ users: [...users, data], newUser: '' });
+    Keyboard.dismiss();
   }
   render() {
     const { users, newUser } = this.state;
