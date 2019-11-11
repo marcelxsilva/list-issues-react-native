@@ -16,9 +16,20 @@ import { Keyboard, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '../../services/api';
 import AsyncStorage from '@react-native-community/async-storage';
+import PropTypes from 'prop-types';
 
 
 export default class Main extends Component {
+  static navigationOptions = {
+    title: 'Usuários'
+  }
+
+  static propTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func,
+    }).isRequired,
+  }
+
   state = {
     newUser: '',
     users: [],
@@ -27,6 +38,7 @@ export default class Main extends Component {
   }
 
   async  componentDidMount() {
+
     const users = await AsyncStorage.getItem('users');
     if (users) {
       this.setState({ users: JSON.parse(users) });
@@ -51,6 +63,10 @@ export default class Main extends Component {
     }
     this.setState({ users: [...users, data], newUser: '', loading: false });
     Keyboard.dismiss();
+  }
+  handleNavigate = (user) => {
+    const { navigation } = this.props;
+    navigation.navigate('User', { user });
   }
   render() {
     const { users, newUser, loading } = this.state;
@@ -88,7 +104,7 @@ export default class Main extends Component {
               <Avatar source={{ uri: item.avatar }} />
               <Name>{item.name}</Name>
               <Bio>{item.bio}</Bio>
-              <ProfileButton onPress={() => { }}>
+              <ProfileButton onPress={() => this.handleNavigate({ item })}>
                 <ProfileButtonText>Ver Perfil</ProfileButtonText>
               </ProfileButton>
             </User>
@@ -97,7 +113,4 @@ export default class Main extends Component {
       </Container>
     );
   }
-}
-Main.navigationOptions = {
-  title: 'Usuários'
 }

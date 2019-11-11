@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { View } from 'react-native';
 
 // import { Container } from './styles';
 
-export default function User() {
-  return (
-    <div />
-  );
+export default function User({ navigation }) {
+
+  console.tron.log(navigation.getParam('user'))
+  return <View />;
 }
