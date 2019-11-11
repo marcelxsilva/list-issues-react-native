@@ -7,7 +7,7 @@ class App extends Component {
   render() {
     return (
       <>
-      <StatusBar barStyle='light-content' backgroundColor='#7159c1'/>
+      <StatusBar barStyle='light-content' backgroundColor='#3498DB'/>
       <Routes />
       </>
     );
